@@ -1,0 +1,165 @@
+
+Boru[] boru = new Boru[4];
+
+PVector ppos;
+PVector pvel;
+PVector pacc;
+
+int died = 0 ;
+
+boolean started = false;
+
+boolean inpipe = false;
+
+void setup(){
+  fullScreen();
+  
+  frameRate(60);
+  
+  ppos = new PVector(width/12,height/2);
+  pvel = new PVector(0,0);
+  pacc = new PVector(0,0.5);
+  
+  for(int i = 0 ; i < boru.length ; i++){
+  
+  boru[i] = new Boru(i+1);
+  
+  boru[i].begin();
+  
+  }
+  
+}
+
+void draw(){
+   background(180,180,255);
+   
+   if(started == false){
+     
+     fill(255,255,100);
+    ellipse(width/12,height/2,20,20); 
+     
+   }
+   
+ if(started == true){
+   
+   //-
+   
+   for(int i = 0 ; i < boru.length ; i++){
+   
+   boru[i].show();
+   boru[i].move();
+   boru[i].update();
+   
+   }
+   
+   ppos.add(pvel);
+   pvel.add(pacc);
+ 
+ textSize(40);
+   text(died,10,50);
+   
+   fill(255,255,100);
+   ellipse(ppos.x,ppos.y,20,20);
+   fill(255);
+   ellipse(ppos.x+5,ppos.y-4,5,5);
+   fill(0);
+   ellipse(ppos.x+5,ppos.y-4,2,2);
+   
+   if(inpipe == true){
+     
+     died++;
+      inpipe = false; 
+   }
+   
+   for(int i = 0 ; i < boru.length ; i++){
+   
+   if(ppos.x > boru[i].pos.x && ppos.x < boru[i].pos.x + 90 && ppos.y > boru[i].pos.y || ppos.x > boru[i].pos.x && ppos.x < boru[i].pos.x + 90 && ppos.y < boru[i].pos.y - boru[i].bosluk){
+     inpipe = true;
+    
+    background(0);
+    textSize(80);
+    fill(200,10,10);
+    text("GEBERDİNN!! ",width/8,height/2);
+     
+   }
+   
+   }
+   
+   if(ppos.y >= height){
+    
+     pvel.y = -5;
+     
+   }else if(ppos.y <= 0){
+     
+     pvel.y = 5;
+     
+   }
+   
+   //-
+   
+ }
+   
+}
+
+void keyPressed(){
+  
+ if(key == ' '){
+   
+  pvel.set(0,-10);
+   
+ }
+ 
+ if(key == ' ' && started ==  false){
+   
+  started = true;
+   
+ }
+  
+}
+
+class Boru {
+  
+  PVector pos;
+  
+  int x;
+  
+  int     vel = 4;
+
+  int bosluk = 200;
+  
+  Boru(int a){
+    
+    x = a*450;
+    
+  }
+
+  void begin() {
+
+    pos = new PVector(width + x,random(bosluk,height));
+    
+  }
+
+  void show() {
+
+    fill(10, 200, 40);
+
+    rect(pos.x, pos.y, 90, 1000);
+    rect(pos.x, pos.y - bosluk, 90, -1000);
+  }
+
+  void move() {
+
+    pos.x -= vel;
+    
+  }
+
+  void update() {
+    
+    if(pos.x < -95){
+      
+      pos.set(width,random(bosluk,height));
+      
+    }
+    
+  }
+}
