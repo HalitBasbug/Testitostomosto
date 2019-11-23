@@ -79,7 +79,7 @@ void draw(){
     background(0);
     textSize(80);
     fill(200,10,10);
-    text("GEBERDİNN!! ",width/8,height/2);
+    text("You're Dead ",width/8,height/2);
      
    }
    
